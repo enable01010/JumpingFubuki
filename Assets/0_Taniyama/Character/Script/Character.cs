@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
 public partial class Character : Singleton<Character>
@@ -9,7 +10,7 @@ public partial class Character : Singleton<Character>
 
     //ステートに関係する処理
     A_PlayerState state;
-    [SerializeField] IdleState idle;
+    [SerializeField] IdleSliderState idle;// 変更
     [SerializeField] MoveState move;
     [SerializeField] Fall fall;
     [SerializeField] WallLandingMotion wallLanding;
@@ -22,6 +23,7 @@ public partial class Character : Singleton<Character>
     [SerializeField,ReadOnly]Vector3 moveDir;
     [SerializeField] GameObject _arrow;
     [SerializeField] SpriteRenderer[] _visions;
+    [SerializeField] Slider _slider;// 追加
 
     //ステート関係無いデータ
     [SerializeField,Range(0,1)] float freePartRait = 0.5f;
