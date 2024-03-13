@@ -33,6 +33,7 @@ public partial class Character : Singleton<Character>
 
         //Slider‚ÉŠÖ‚·‚é•Ï”
         [SerializeField] bool isVisualizeSlider = true;
+        [SerializeField] bool isSliderSpeedFixedTime = true;
         Slider _slider;
         [SerializeField] float sliderMaxTime = 0.8f;
         [SerializeField] float sliderMaxWaitTime = 0.2f;
@@ -149,6 +150,10 @@ public partial class Character : Singleton<Character>
         private void TouchOut()
         {
             Vector3 dir = CalculatInputDir();
+
+            SliderControl();
+            dir = SliderDir(dir);
+
             character.moveDir = dir;
             character.ChangeState(character.move);
 
@@ -299,7 +304,7 @@ public partial class Character : Singleton<Character>
         /// </summary>
         private void SliderControl()
         {
-            if (isVisualizeArrow == false) return;
+            if (isVisualizeSlider == false) return;
 
             countTime += Time.deltaTime;
 
@@ -307,9 +312,26 @@ public partial class Character : Singleton<Character>
 
             sliderValue = countTime / sliderMaxTime;
 
-            if (sliderValue > 1.0f) sliderValue = 1.0f;
+            //if (sliderValue > 1.0f) sliderValue = 1.0f;
+            sliderValue = (sliderValue > 1.0f) ? 1.0f : sliderValue;
 
             _slider.value = sliderValue;
+
+            SliderSpeedControl();
+        }
+
+
+        /// <summary>
+        /// Slider‚Ìspeed‚ğ’²®‚·‚éˆ—
+        /// </summary>
+        private void SliderSpeedControl()
+        {
+            if (isSliderSpeedFixedTime == false) return;
+
+            float numerator = sliderCurveRate.Evaluate(sliderValue) - sliderCurveRate.Evaluate(0.0f);
+            float denominator = sliderCurveRate.Evaluate(1.0f) - sliderCurveRate.Evaluate(0.0f);
+
+            _slider.value = numerator / denominator;
         }
 
 

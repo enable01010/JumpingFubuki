@@ -1746,24 +1746,33 @@ MonoBehaviour:
     outputPitch: 3
     isVisualizeSlider: 1
     sliderMaxTime: 0.8
-    sliderMaxWaitTime: 0.2
+    sliderMaxWaitTime: 0.4
     sliderCurveRate:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0.8
-        inSlope: 0.40000004
-        outSlope: 0.40000004
+        inSlope: 0.27516803
+        outSlope: 0.27516803
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
+        time: 0.8039978
+        value: 1.0212345
+        inSlope: 0.78624177
+        outSlope: 0.78624177
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.10744488
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 1
-        value: 1.2
-        inSlope: 0.40000004
-        outSlope: 0.40000004
+        value: 1.5
+        inSlope: 2.442654
+        outSlope: 2.442654
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
