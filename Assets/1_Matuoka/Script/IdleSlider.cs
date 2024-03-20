@@ -34,6 +34,8 @@ public partial class Character : Singleton<Character>
         //SliderÇ…ä÷Ç∑ÇÈïœêî
         [SerializeField] bool isVisualizeSlider = true;
         [SerializeField] bool isSliderSpeedFixedTime = true;
+        [SerializeField] bool isNormalized = false;
+        [SerializeField, Range(0.5f, 2.0f)] float isNormalizedRate = 1.0f;
         Slider _slider;
         [SerializeField] float sliderMaxTime = 0.8f;
         [SerializeField] float sliderMaxWaitTime = 0.2f;
@@ -342,6 +344,11 @@ public partial class Character : Singleton<Character>
         private Vector3 SliderDir(Vector3 dir)
         {
             if (isVisualizeSlider == false) return dir;
+
+            if (isNormalized == true)
+            {
+                dir = dir.normalized * isNormalizedRate;
+            }
 
             dir *= sliderCurveRate.Evaluate(sliderValue);
 
