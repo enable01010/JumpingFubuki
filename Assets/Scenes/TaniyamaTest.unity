@@ -1837,6 +1837,8 @@ MonoBehaviour:
     _hoppng: {fileID: 255912797}
     minHopping: 0.5
     downBody: 0.5
+    trailLessPitch: 0.925
+    _treail: {fileID: 1291529114}
   move:
     headLine: 4
     headWidth: 0.5
@@ -4611,12 +4613,12 @@ TrailRenderer:
       - serializedVersion: 3
         time: 0
         value: 0.5
-        inSlope: 0
-        outSlope: 0
+        inSlope: -1.1483018
+        outSlope: -1.1483018
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.33333334
+        outWeight: 0.1396648
       - serializedVersion: 3
         time: 1
         value: 0

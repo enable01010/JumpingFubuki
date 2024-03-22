@@ -56,6 +56,11 @@ public partial class Character : Singleton<Character>
         Vector3 startPos;
         Vector3 startSca;
 
+        //トレイルの処理
+        float trailStartTime;
+        [SerializeField,Range(0,1)]float trailLessPitch = 0.9f;
+        [SerializeField] TrailRenderer _treail;
+
         public override void OnEnter()
         {
             this._arrow = character._arrow;
@@ -77,10 +82,16 @@ public partial class Character : Singleton<Character>
             {
                 TouchStart();
             }
+
+            //トレイル関係の処理
+            trailStartTime = _treail.time;
+            Debug.Log(trailStartTime);
         }
 
         public override void OnUpdate()
         {
+            SetTrailParameter();
+
             if (Input.GetMouseButtonDown(0))
             {
                 TouchStart();
@@ -97,6 +108,7 @@ public partial class Character : Singleton<Character>
             {
                 AnimControl();
             }
+
         }
 
         public override void OnExit()
@@ -110,6 +122,9 @@ public partial class Character : Singleton<Character>
 
             _slider.gameObject.SetActive(false);
             SetDefaultSlider();
+
+            //トレイル関係の処理
+             _treail.time = trailStartTime;
         }
 
         /// <summary>
@@ -388,6 +403,8 @@ public partial class Character : Singleton<Character>
             sita = Mathf.PI;
             character.transform.position = startPos;
             character.transform.localScale = startSca;
+            Vector3 sca = new Vector3(1, 1, 1);
+            _hoppng.localScale = Vector3.one;
         }
 
         /// <summary>
@@ -442,6 +459,16 @@ public partial class Character : Singleton<Character>
                     character.transform.position = pos;
                 }
             }
+        }
+
+        /// <summary>
+        /// トレイルの表示を調整する処理
+        /// </summary>
+        private void SetTrailParameter()
+        {
+            if (_treail.time < 0.001f) return;
+
+            _treail.time *= trailLessPitch;
         }
 
     }
