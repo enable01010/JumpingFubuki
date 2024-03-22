@@ -1792,6 +1792,8 @@ MonoBehaviour:
     outputPitch: 3
     isVisualizeSlider: 1
     isSliderSpeedFixedTime: 1
+    isNormalized: 0
+    isNormalizedRate: 1
     sliderMaxTime: 0.8
     sliderMaxWaitTime: 0.4
     sliderCurveRate:
@@ -4803,6 +4805,7 @@ GameObject:
   - component: {fileID: 1387288541}
   - component: {fileID: 1387288542}
   - component: {fileID: 1387288543}
+  - component: {fileID: 1387288544}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4948,7 +4951,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387288536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4dc7e9b039d4ad44974076c4528bf12, type: 3}
   m_Name: 
@@ -4959,6 +4962,30 @@ MonoBehaviour:
   max_Y: 150
   min_X: -12
   max_X: 15
+  background: {fileID: 453839570}
+  parse: 0.9
+  minSize: 6
+  maxSize: 10
+  moveScale: 4
+--- !u!114 &1387288544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387288536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8186e6de98f6b44a22859d45ea71e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startDistance: {x: 0, y: -1, z: 10}
+  moveTime: 5
+  min_Y: -3
+  max_Y: 150
+  min_X: -12
+  max_X: 15
+  goalDistance: 1
   background: {fileID: 453839570}
   parse: 0.9
   minSize: 6

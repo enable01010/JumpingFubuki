@@ -9,7 +9,7 @@ public partial class Character : Singleton<Character>
     Animator _animator;
 
     //ステートに関係する処理
-    A_PlayerState state;
+    public A_PlayerState state { private set; get; }
     [SerializeField] IdleSliderState idle;// 変更
     [SerializeField] MoveState move;
     [SerializeField] Fall fall;
