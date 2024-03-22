@@ -69,6 +69,12 @@ public partial class Character : Singleton<Character>
             Vector3 shadowSca = characterShadow.transform.localScale;
             shadowSca.x = Mathf.Abs(shadowSca.x) * Mathf.Sign(character.transform.localScale.x);
             characterShadow.transform.position = goalPos;
+
+            //“ü—Íó‚¯æ‚èˆ—
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
+            {
+                TouchStart();
+            }
         }
 
         public override void OnUpdate()
