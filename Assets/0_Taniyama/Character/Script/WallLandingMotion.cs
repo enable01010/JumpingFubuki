@@ -268,7 +268,7 @@ public partial class Character : Singleton<Character>
 
             //サイズ計算
             float rait = dir.magnitude;
-            float size_X = MathT.GetRaitoToValue(rait, arrowSizeMin_X, arrowSizeMax_X, false);
+            float size_X = MathT.GetValueToRange(rait, arrowSizeMin_X, arrowSizeMax_X, false);
             float size_Y = MathT.CastLimit(size_X, float.NegativeInfinity, arrowSizeMax_Y);
             Vector3 localScale = new Vector3(size_X, size_Y, 1);
 

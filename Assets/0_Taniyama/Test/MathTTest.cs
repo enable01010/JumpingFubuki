@@ -13,7 +13,7 @@ public class MathTTest : MonoBehaviour
     void Start()
     {
         //_text.text = MathT.CastLimit(value,min,max).ToString();
-        _text.text = MathT.GetValueToRaito(value, min, max).ToString();
+        _text.text = MathT.getRangeToValue(value, min, max).ToString();
     }
 
 

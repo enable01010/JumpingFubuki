@@ -34,7 +34,7 @@ public class MathT
     /// <param name="max">上限</param>
     /// <param name="isCast">0~1に矯正するかどうか</param>
     /// <returns>比率</returns>
-    static public float GetValueToRaito(float value,float min,float max,bool isCast = true)
+    static public float getRangeToValue(float value,float min,float max,bool isCast = true)
     {
         float answer = 0;
 
@@ -52,7 +52,7 @@ public class MathT
     /// <param name="max">上限</param>
     /// <param name="isCast">上限下限に矯正するかどうか</param>
     /// <returns>実数</returns>
-    static public float GetRaitoToValue(float raito,float min,float max,bool isCast = true)
+    static public float GetValueToRange(float raito,float min,float max,bool isCast = true)
     {
         float answer = 0;
 
@@ -94,7 +94,7 @@ public class MathT
     {
         float answer = 0;
 
-        answer = GetValueToRaito(value, min, max);
+        answer = getRangeToValue(value, min, max);
         answer = GetRaito_anti(answer);
 
         return answer;
@@ -115,6 +115,26 @@ public class MathT
     }
 
     /// <summary>
+    /// 1以下の少数を反転する処理
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    static public float OneMinus(float value, bool isErrorLog = true)
+    {
+        if (isErrorLog == true && value > 1)
+            Debug.LogWarning(
+                "OneMinus関数の引数が不正の可能性があります\n" +
+                "エラーを通知しない場合は第二引数をfalseにしてください"
+                );
+
+        float answer = 0;
+
+        answer = 1 - value;
+
+        return answer;
+    }
+
+    /// <summary>
     /// 0～1までの数値を周期的に返す関数
     /// </summary>
     /// <param name="pitch">周期</param>
@@ -127,7 +147,7 @@ public class MathT
         float time = offset + Time.realtimeSinceStartup;//ゲームが開始してからの経過時間
         float theta = time * 2 * Mathf.PI * pitch;
         float y = Mathf.Sin(theta);
-        answer = GetValueToRaito(y, -1, 1);
+        answer = getRangeToValue(y, -1, 1);
 
         return answer;
     }

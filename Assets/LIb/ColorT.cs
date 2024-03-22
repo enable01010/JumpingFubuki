@@ -19,7 +19,7 @@ public class ColorT
         Color answer = new Color();
         
         value = MathT.CastLimit(value, 0, float.PositiveInfinity);
-        value = (value <= 1.0f) ? value : MathT.GetValueToRaito(value, 0, 255);
+        value = (value <= 1.0f) ? value : MathT.getRangeToValue(value, 0, 255);
         answer = color;
         switch (mode)
         {
