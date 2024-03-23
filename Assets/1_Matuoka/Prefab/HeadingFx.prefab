@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 251138880631250660}
   - component: {fileID: 6381126946229645900}
   m_Layer: 0
-  m_Name: LandingFx
+  m_Name: HeadingFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

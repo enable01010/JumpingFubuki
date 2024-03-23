@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class M_Clear : MonoBehaviour
 {
     #region Fields
 
     private bool isOneTime = false;
-    [SerializeField] float distance = 2.0f;
+    [SerializeField] private float distance = 2.0f;
+    [SerializeField] private GameObject clearCanvasPrefab;
+    private GameObject clearCanvas;
+    [SerializeField] TextMeshProUGUI textMeshPro;
 
     #endregion
 
@@ -16,7 +20,8 @@ public class M_Clear : MonoBehaviour
 
     private void Start()
     {
-
+        //clearCanvas = Instantiate(clearCanvasPrefab);
+        clearCanvas = clearCanvasPrefab;
     }
 
     private void Update()
@@ -30,9 +35,13 @@ public class M_Clear : MonoBehaviour
         {
             if (Vector2.Distance(Character.instance.transform.position, this.transform.position) < distance)
             {
-                Debug.Log("クリアだよ！！");
+                //Debug.Log("クリアだよ！！");
 
-                SceneAnimation.instance.LoadScene(0);
+                TimeManager.instance.CountStop();
+
+                textMeshPro.text += "\n" + TimeManager.instance.TextChange();
+
+                clearCanvas.SetActive(true);
 
                 isOneTime = true;
             }
@@ -44,9 +53,9 @@ public class M_Clear : MonoBehaviour
 
     #region CustomMethod
 
-    private void CustomMethod()
+    public void TitleLoad()
     {
-
+        SceneAnimation.instance.LoadScene(0);
     }
 
     #endregion

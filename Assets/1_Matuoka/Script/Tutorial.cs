@@ -7,8 +7,9 @@ public class Tutorial : MonoBehaviour
     #region Fields
 
     private bool isOneTime = false;
-    [SerializeField] float distance = 2.0f;
-    [SerializeField] GameObject tutorialCanvas;
+    [SerializeField] private float distance = 2.0f;
+    [SerializeField] private GameObject tutorialCanvasPrefab;
+    private GameObject tutorialCanvas;
 
     #endregion
 
@@ -17,7 +18,8 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        
+        //tutorialCanvas = Instantiate(tutorialCanvasPrefab);
+        tutorialCanvas = tutorialCanvasPrefab;
     }
 
     private void Update()
@@ -31,11 +33,13 @@ public class Tutorial : MonoBehaviour
         {
             if (Vector2.Distance(Character.instance.transform.position, this.transform.position) < distance)
             {
-                Debug.Log("チュートリアルだよ！！");
+                //Debug.Log("チュートリアルだよ！！");
 
                 tutorialCanvas.SetActive(true);
 
                 isOneTime = true;
+
+                TimeManager.instance.CountStop();
             }
         }
     }
@@ -45,9 +49,11 @@ public class Tutorial : MonoBehaviour
 
     #region CustomMethod
 
-    private void CustomMethod()
+    public void CanvasActiveFalse ()
     {
+        tutorialCanvas.SetActive(false);
 
+        TimeManager.instance.CountStart();
     }
 
     #endregion
