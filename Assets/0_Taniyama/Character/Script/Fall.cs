@@ -44,9 +44,11 @@ public partial class Character : Singleton<Character>
                 {
                     case LinecastVec.horizontal:
                         character.ChangeState(character.idle);
+                        Instantiate(character.landingFx, _hoppingFrontPos.position, Quaternion.identity);
                         return;
                     case LinecastVec.other:
                         character.ChangeState(character.idle);
+                        Instantiate(character.landingFx, _hoppingFrontPos.position, Quaternion.identity);
                         return;
                 }
             }

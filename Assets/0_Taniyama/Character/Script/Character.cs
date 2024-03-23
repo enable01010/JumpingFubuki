@@ -24,6 +24,7 @@ public partial class Character : Singleton<Character>
     [SerializeField] GameObject _arrow;
     [SerializeField] SpriteRenderer[] _visions;
     [SerializeField] Slider _slider;// 追加
+    [SerializeField] GameObject landingFx;
 
     //ステート関係無いデータ
     [SerializeField,Range(0,1)] float freePartRait = 0.5f;
