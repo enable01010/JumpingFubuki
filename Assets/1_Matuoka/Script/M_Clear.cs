@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tutorial : MonoBehaviour
+public class M_Clear : MonoBehaviour
 {
     #region Fields
 
     private bool isOneTime = false;
     [SerializeField] float distance = 2.0f;
-    [SerializeField] GameObject tutorialCanvas;
 
     #endregion
 
@@ -17,7 +16,7 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void Update()
@@ -31,9 +30,9 @@ public class Tutorial : MonoBehaviour
         {
             if (Vector2.Distance(Character.instance.transform.position, this.transform.position) < distance)
             {
-                Debug.Log("チュートリアルだよ！！");
+                Debug.Log("クリアだよ！！");
 
-                tutorialCanvas.SetActive(true);
+                SceneAnimation.instance.LoadScene(0);
 
                 isOneTime = true;
             }
