@@ -13,7 +13,8 @@ public class SceneAnimation : Singleton<SceneAnimation>
     [SerializeField] Slider _slider;
     private AsyncOperation async;
     float nowTime = 0;
-    int count = 0;
+
+    public bool isLoading { get; private set; } = false;
 
     public override void OnInitialize()
     {
@@ -25,7 +26,6 @@ public class SceneAnimation : Singleton<SceneAnimation>
 
     public void LoadScene(int sceneNumbaer)
     {
-        nowTime = 0;
         StartCoroutine(LoadStart(true, sceneNumbaer,null));
     }
 
@@ -36,6 +36,9 @@ public class SceneAnimation : Singleton<SceneAnimation>
 
     IEnumerator LoadStart(bool isNumber,int number,string name)
     {
+        nowTime = 0;
+        isLoading = true;
+
         _anim.SetBool("FadeOut", false);
         _anim.SetBool("FadeIn",true);
         yield return new WaitForSeconds(FADEIN_TIME);
@@ -53,18 +56,16 @@ public class SceneAnimation : Singleton<SceneAnimation>
         while (!async.isDone || nowTime < ANIMATION_TIME)
         {
             nowTime += Time.deltaTime;
-            count++;
             float timeRate = nowTime / ANIMATION_TIME;
             float progressVal = Mathf.Clamp01(async.progress / 0.9f);
             float lessValue = (timeRate > progressVal) ? progressVal : timeRate;
             if (_slider != null)
-
                 _slider.value = lessValue;
             yield return null;
         }
-        Debug.Log(count);
         _anim.SetBool("FadeIn", false);
         _anim.SetBool("FadeOut", true);
         yield return new WaitForSeconds(ANIMATION_TIME);
+        isLoading = false;
     }
 }
