@@ -58,5 +58,10 @@ public class TimeManager : Singleton<TimeManager>
         return ((int)nowTime / 60).ToString("D2") + ":" + ((int)nowTime % 60).ToString("D2") + "." + (int)(nowTime * 10) % 10;
     }
 
+    public void TextActiveFalse()
+    {
+        textMeshPro.text = "";
+    }
+
     #endregion
 }

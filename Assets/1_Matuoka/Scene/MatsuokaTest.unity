@@ -1763,6 +1763,7 @@ MonoBehaviour:
   - {fileID: 1835626288}
   _slider: {fileID: 2115344296}
   landingFx: {fileID: 251138880631250661, guid: 50ca5a7d60300214d9be2d1961f69480, type: 3}
+  headingFx: {fileID: 251138880631250661, guid: 151dbebb734c2c8429e9bb3aab9a8211, type: 3}
   freePartRait: 0.5
   freePartRaitMoveSpeed: 0.1
 --- !u!1 &506981761

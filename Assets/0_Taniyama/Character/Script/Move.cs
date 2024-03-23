@@ -17,6 +17,12 @@ public partial class Character : Singleton<Character>
         [SerializeField] float headHeight = 2.5f;
         [SerializeField] int wallCheckFrame = 10;
 
+        // Fxä÷òA
+        [SerializeField] float fxSizeMaxRate = 2.0f;
+        [SerializeField] float fxSizeMinRate = 0.5f;
+        [SerializeField] float fxSizeMaxSpeed = 3.0f;
+        [SerializeField] float fxSizeMinSpeed = 0.0f;
+
         public override void OnEnter()
         {
             this.downforce = character.downforce;
@@ -47,13 +53,14 @@ public partial class Character : Singleton<Character>
                 switch (vec)
                 {
                     case LinecastVec.horizontal:
+                        LandingFxInstantiate();
                         character.ChangeState(character.idle);
-                        Instantiate(character.landingFx, _hoppingFrontPos.position, Quaternion.identity);
                         return;
 
                     case LinecastVec.vertical:
                         character.moveDir = Vector3.zero;
                         character.ChangeState(character.fall);
+                        Instantiate(character.headingFx, VectorT.Add_Y(_hoppingFrontPos.position, headLine), Quaternion.identity);
                         return;
                 }
             }
@@ -69,6 +76,7 @@ public partial class Character : Singleton<Character>
             if (hitTop || hitFront)
             {
                 character.ChangeState(character.fall);
+                Instantiate(character.headingFx, VectorT.Add_Y(_hoppingFrontPos.position, headLine), Quaternion.identity);
                 character.moveDir = Vector3.zero;
                 return;
             }
@@ -110,6 +118,18 @@ public partial class Character : Singleton<Character>
             character.moveDir.y -= downforce * Time.fixedDeltaTime;
 
         }
-    }
 
+        /// <summary>
+        /// Fxê∂ê¨
+        /// </summary>
+        private void LandingFxInstantiate()
+        {
+            GameObject fx = Instantiate(character.landingFx, _hoppingFrontPos.position, Quaternion.identity);
+
+            float speedRate = Mathf.InverseLerp(fxSizeMinSpeed, fxSizeMaxSpeed, Mathf.Abs(character.moveDir.y));
+            float sizeRate = Mathf.Lerp(fxSizeMinRate, fxSizeMaxRate, speedRate);
+
+            fx.transform.localScale *= sizeRate;
+        }
+    }
 }

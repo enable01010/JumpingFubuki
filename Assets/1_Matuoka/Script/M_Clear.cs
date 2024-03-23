@@ -39,6 +39,8 @@ public class M_Clear : MonoBehaviour
 
                 TimeManager.instance.CountStop();
 
+                TimeManager.instance.TextActiveFalse();
+
                 textMeshPro.text += "\n" + TimeManager.instance.TextChange();
 
                 clearCanvas.SetActive(true);
