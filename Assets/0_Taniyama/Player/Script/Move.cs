@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class Character : Singleton<Character>
+public partial class Player : Singleton<Player>
 {
     [System.Serializable]
     public class MoveState : A_PlayerState
@@ -25,16 +25,16 @@ public partial class Character : Singleton<Character>
 
         public override void OnEnter()
         {
-            this.downforce = character.downforce;
-            this.moveSpeed_Y = character.moveSpeed_Y;
-            this.moveSpeed_X = character.moveSpeed_X;
-            this._hoppingFrontPos = character._hoppingFrontPos;
+            this.downforce = player.downforce;
+            this.moveSpeed_Y = player.moveSpeed_Y;
+            this.moveSpeed_X = player.moveSpeed_X;
+            this._hoppingFrontPos = player._hoppingFrontPos;
         }
 
         public override void OnFixedUpdate()
         {
             //ë¨ìxí≤êÆèàóù
-            Vector3 moveDir = character.moveDir;
+            Vector3 moveDir = player.moveDir;
             moveDir.x *= moveSpeed_X;
             moveDir.y *= moveSpeed_Y;
             moveDir *= Time.fixedDeltaTime;
@@ -45,45 +45,45 @@ public partial class Character : Singleton<Character>
             {
                 Vector3 hitPos = hit.point;
                 Vector3 dir = hitPos - _hoppingFrontPos.position;
-                Vector3 goalPos = character.transform.position + dir;
+                Vector3 goalPos = player.transform.position + dir;
                 goalPos.y = hit.point.y + 0.2f;
-                character.transform.position = goalPos;
+                player.transform.position = goalPos;
 
-                LinecastVec vec = character.CheckLinecastVec(hit.point);
+                LinecastVec vec = player.CheckLinecastVec(hit.point);
                 switch (vec)
                 {
                     case LinecastVec.horizontal:
                         LandingFxInstantiate();
-                        character.ChangeState(character.idle);
+                        player.ChangeState(player.idle);
                         return;
 
                     case LinecastVec.vertical:
-                        character.moveDir = Vector3.zero;
-                        character.ChangeState(character.fall);
-                        Instantiate(character.headingFx, VectorT.Add_Y(_hoppingFrontPos.position, headLine), Quaternion.identity);
+                        player.moveDir = Vector3.zero;
+                        player.ChangeState(player.fall);
+                        Instantiate(player.headingFx, VectorT.Add_Y(_hoppingFrontPos.position, headLine), Quaternion.identity);
                         return;
                 }
             }
 
             //è„Ç†ÇΩÇËîªíËèàóù
-            Vector3 headLeftUpPos = character.transform.position;
+            Vector3 headLeftUpPos = player.transform.position;
             headLeftUpPos.y += headLine;
-            Vector3 headFrontUpPos = character.transform.position;
+            Vector3 headFrontUpPos = player.transform.position;
             headFrontUpPos.y += headLine;
-            headFrontUpPos.x += headWidth * Mathf.Sign(character.moveDir.x);
-            RaycastHit2D hitTop = Physics2D.Raycast(headLeftUpPos, Vector3.right * Mathf.Sign(character.moveDir.x), headWidth);
+            headFrontUpPos.x += headWidth * Mathf.Sign(player.moveDir.x);
+            RaycastHit2D hitTop = Physics2D.Raycast(headLeftUpPos, Vector3.right * Mathf.Sign(player.moveDir.x), headWidth);
             RaycastHit2D hitFront = Physics2D.Raycast(headFrontUpPos, Vector3.down, headHeight);
             if (hitTop || hitFront)
             {
-                character.ChangeState(character.fall);
-                Instantiate(character.headingFx, VectorT.Add_Y(_hoppingFrontPos.position, headLine), Quaternion.identity);
-                character.moveDir = Vector3.zero;
+                player.ChangeState(player.fall);
+                Instantiate(player.headingFx, VectorT.Add_Y(_hoppingFrontPos.position, headLine), Quaternion.identity);
+                player.moveDir = Vector3.zero;
                 return;
             }
 
             //è´óàÇÃï«îªíËèàóù
             Vector3 nextPos = _hoppingFrontPos.position;
-            Vector3 nextDir = character.moveDir;
+            Vector3 nextDir = player.moveDir;
             bool isEnd = false;
             for (int i = 0; i < wallCheckFrame && isEnd == false; i++)
             {
@@ -95,16 +95,16 @@ public partial class Character : Singleton<Character>
                 if (wallHit)
                 {
 
-                    LinecastVec vec = character.CheckLinecastVec(wallHit.point);
+                    LinecastVec vec = player.CheckLinecastVec(wallHit.point);
                     switch (vec)
                     {
                         case LinecastVec.horizontal:
                             isEnd = true;
                             break;
                         case LinecastVec.vertical:
-                            character.wallLanding.SetCount(i);
-                            character.wallLanding.SetGoalPos(wallHit.point);
-                            character.ChangeState(character.wallLanding);
+                            player.wallLanding.SetCount(i);
+                            player.wallLanding.SetGoalPos(wallHit.point);
+                            player.ChangeState(player.wallLanding);
                             return;
                     }
                 }
@@ -114,8 +114,8 @@ public partial class Character : Singleton<Character>
             }
 
             //à⁄ìÆèàóù
-            character.transform.position += moveDir;
-            character.moveDir.y -= downforce * Time.fixedDeltaTime;
+            player.transform.position += moveDir;
+            player.moveDir.y -= downforce * Time.fixedDeltaTime;
 
         }
 
@@ -124,9 +124,9 @@ public partial class Character : Singleton<Character>
         /// </summary>
         private void LandingFxInstantiate()
         {
-            GameObject fx = Instantiate(character.landingFx, _hoppingFrontPos.position, Quaternion.identity);
+            GameObject fx = Instantiate(player.landingFx, _hoppingFrontPos.position, Quaternion.identity);
 
-            float speedRate = Mathf.InverseLerp(fxSizeMinSpeed, fxSizeMaxSpeed, Mathf.Abs(character.moveDir.y));
+            float speedRate = Mathf.InverseLerp(fxSizeMinSpeed, fxSizeMaxSpeed, Mathf.Abs(player.moveDir.y));
             float sizeRate = Mathf.Lerp(fxSizeMinRate, fxSizeMaxRate, speedRate);
 
             fx.transform.localScale *= sizeRate;

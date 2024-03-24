@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class Character : Singleton<Character>
+public partial class Player : Singleton<Player>
 {
     [System.Serializable]
     public class IdleState : A_PlayerState
@@ -63,18 +63,18 @@ public partial class Character : Singleton<Character>
 
         public override void OnEnter()
         {
-            this._arrow = character._arrow;
-            this._visions = character._visions;
-            this._slider = character._slider;
-            this.downforce = character.downforce;
-            this.moveSpeed_Y = character.moveSpeed_Y;
-            this.moveSpeed_X = character.moveSpeed_X;
-            this._hoppingFrontPos = character._hoppingFrontPos;
+            this._arrow = player._arrow;
+            this._visions = player._visions;
+            this._slider = player._slider;
+            this.downforce = player.downforce;
+            this.moveSpeed_Y = player.moveSpeed_Y;
+            this.moveSpeed_X = player.moveSpeed_X;
+            this._hoppingFrontPos = player._hoppingFrontPos;
 
-            character.moveDir = Vector3.zero;
+            player.moveDir = Vector3.zero;
             sita = Mathf.PI;
-            startPos = character.transform.position;
-            startSca = character.transform.localScale;
+            startPos = player.transform.position;
+            startSca = player.transform.localScale;
 
             SetDefaultSlider();
 
@@ -171,8 +171,8 @@ public partial class Character : Singleton<Character>
             SliderControl();
             dir = SliderDir(dir);
 
-            character.moveDir = dir;
-            character.ChangeState(character.move);
+            player.moveDir = dir;
+            player.ChangeState(player.move);
 
             SetDefaultSlider();
         }
@@ -243,8 +243,8 @@ public partial class Character : Singleton<Character>
         private void CharacterVisualControl(Vector3 dir)
         {
             //アニメーターに値を送信
-            character._animator.SetFloat("holizontal", Mathf.Abs(dir.x));
-            character._animator.SetFloat("vertical", dir.y);
+            player._animator.SetFloat("holizontal", Mathf.Abs(dir.x));
+            player._animator.SetFloat("vertical", dir.y);
 
             //キャラクターの向きを調整
             ReversalDirection(dir.x);
@@ -378,9 +378,9 @@ public partial class Character : Singleton<Character>
         {
             if (direction == 0) return;
 
-            Vector3 localScale = character.transform.localScale;
+            Vector3 localScale = player.transform.localScale;
             float xValue = (direction > 0) ? Mathf.Abs(localScale.x) : -Mathf.Abs(localScale.x);
-            character.transform.localScale = VectorT.Chenge_X(localScale, xValue);
+            player.transform.localScale = VectorT.Chenge_X(localScale, xValue);
         }
 
         /// <summary>
@@ -401,8 +401,8 @@ public partial class Character : Singleton<Character>
             if (isAnimation == false) return;
 
             sita = Mathf.PI;
-            character.transform.position = startPos;
-            character.transform.localScale = startSca;
+            player.transform.position = startPos;
+            player.transform.localScale = startSca;
             Vector3 sca = new Vector3(1, 1, 1);
             _hoppng.localScale = Vector3.one;
         }
@@ -420,17 +420,17 @@ public partial class Character : Singleton<Character>
             {
 
                 float posYAddValue = yValue * yPosRate;
-                character.transform.position = VectorT.Add_Y(startPos, posYAddValue);
+                player.transform.position = VectorT.Add_Y(startPos, posYAddValue);
 
                 float scaYAddValue = yValue * yScaRate;
-                character.transform.localScale = VectorT.Add_Y(startSca, scaYAddValue);
+                player.transform.localScale = VectorT.Add_Y(startSca, scaYAddValue);
 
-                character._animator.SetFloat("fall", yValue + 1);
+                player._animator.SetFloat("fall", yValue + 1);
             }
             else
             {
                 float xValue = Mathf.Cos(sita);
-                character._animator.SetFloat("fall", yValue + 1);
+                player._animator.SetFloat("fall", yValue + 1);
 
                 if (xValue < 0)
                 {
@@ -443,7 +443,7 @@ public partial class Character : Singleton<Character>
 
                     Vector3 pos = startPos;
                     pos.y -= yPos;
-                    character.transform.position = pos;
+                    player.transform.position = pos;
                 }
                 else
                 {
@@ -456,7 +456,7 @@ public partial class Character : Singleton<Character>
 
                     Vector3 pos = startPos;
                     pos.y -= yPos;
-                    character.transform.position = pos;
+                    player.transform.position = pos;
                 }
             }
         }

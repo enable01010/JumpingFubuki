@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class Character : Singleton<Character>
+public partial class Player : Singleton<Player>
 {
     [System.Serializable]
-    public class Fall : A_PlayerState
+    public class FallState : A_PlayerState
     {
         [SerializeField, Range(0, 1)] float slow = 0.5f;
         float downforce;
@@ -21,16 +21,16 @@ public partial class Character : Singleton<Character>
 
         public override void OnEnter()
         {
-            this.downforce = character.downforce;
-            this.moveSpeed_Y = character.moveSpeed_Y;
-            this.moveSpeed_X = character.moveSpeed_X;
-            this._hoppingFrontPos = character._hoppingFrontPos;
+            this.downforce = player.downforce;
+            this.moveSpeed_Y = player.moveSpeed_Y;
+            this.moveSpeed_X = player.moveSpeed_X;
+            this._hoppingFrontPos = player._hoppingFrontPos;
         }
 
         public override void OnFixedUpdate()
         {
             //ë¨ìxí≤êÆèàóù
-            Vector3 moveDir = character.moveDir;
+            Vector3 moveDir = player.moveDir;
             moveDir.x *= moveSpeed_X;
             moveDir.y *= moveSpeed_Y;
             moveDir *= Time.fixedDeltaTime;
@@ -41,21 +41,21 @@ public partial class Character : Singleton<Character>
             {
                 Vector3 hitPos = hit.point;
                 Vector3 dir = hitPos - _hoppingFrontPos.position;
-                Vector3 goalPos = character.transform.position + dir;
+                Vector3 goalPos = player.transform.position + dir;
                 goalPos.y = hit.point.y + 0.2f;
-                character.transform.position = goalPos;
+                player.transform.position = goalPos;
 
-                LinecastVec vec = character.CheckLinecastVec(hit.point);
+                LinecastVec vec = player.CheckLinecastVec(hit.point);
                 switch (vec)
                 {
                     case LinecastVec.horizontal:
                         LandingFxInstantiate();
-                        character.ChangeState(character.idle);
+                        player.ChangeState(player.idle);
                         
                         return;
                     case LinecastVec.other:
                         LandingFxInstantiate();
-                        character.ChangeState(character.idle);
+                        player.ChangeState(player.idle);
                         return;
                 }
             }
@@ -68,8 +68,8 @@ public partial class Character : Singleton<Character>
         /// </summary>
         private void Move(Vector3 moveDir)
         {
-            character.transform.position += moveDir;
-            character.moveDir.y -= downforce * Time.fixedDeltaTime * slow;
+            player.transform.position += moveDir;
+            player.moveDir.y -= downforce * Time.fixedDeltaTime * slow;
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ public partial class Character : Singleton<Character>
         /// </summary>
         private void LandingFxInstantiate()
         {
-            GameObject fx = Instantiate(character.landingFx, _hoppingFrontPos.position, Quaternion.identity);
+            GameObject fx = Instantiate(player.landingFx, _hoppingFrontPos.position, Quaternion.identity);
 
-            float speedRate = Mathf.InverseLerp(fxSizeMinSpeed, fxSizeMaxSpeed, Mathf.Abs(character.moveDir.y));
+            float speedRate = Mathf.InverseLerp(fxSizeMinSpeed, fxSizeMaxSpeed, Mathf.Abs(player.moveDir.y));
             float sizeRate = Mathf.Lerp(fxSizeMinRate, fxSizeMaxRate, speedRate);
 
             fx.transform.localScale *= sizeRate;

@@ -58,7 +58,7 @@ public class CameraMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 goalPos = Character.instance.transform.position - startDistance;
+        Vector3 goalPos = Player.instance.transform.position - startDistance;
         goalPos.x = (goalPos.x < min_X) ? min_X : goalPos.x;
         goalPos.x = (goalPos.x > max_X) ? max_X : goalPos.x;
         goalPos.y = (goalPos.y < min_Y) ? min_Y : goalPos.y;

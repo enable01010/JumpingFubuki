@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class Character : Singleton<Character>
+public partial class Player : Singleton<Player>
 {
     [System.Serializable]
-    public class WallLandingMotion : A_PlayerState
+    public class WallLandingState : A_PlayerState
     {
         int count;
         Vector3 goalPos;
@@ -49,25 +49,25 @@ public partial class Character : Singleton<Character>
 
         public override void OnEnter()
         {
-            this._visions = character._visions;
-            this.downforce = character.downforce;
-            this.moveSpeed_Y = character.moveSpeed_Y;
-            this.moveSpeed_X = character.moveSpeed_X;
-            this._hoppingFrontPos = character._hoppingFrontPos;
+            this._visions = player._visions;
+            this.downforce = player.downforce;
+            this.moveSpeed_Y = player.moveSpeed_Y;
+            this.moveSpeed_X = player.moveSpeed_X;
+            this._hoppingFrontPos = player._hoppingFrontPos;
 
             inputDir = Vector3.zero;
             nowTime = 0;
-            startSca = character.transform.localScale;
+            startSca = player.transform.localScale;
             antiSlowRate = 1;
 
             float normalTime = count * Time.fixedDeltaTime;
             slowRate = normalTime / endTime;
 
-            goalPos.x += Mathf.Sign(character.moveDir.x) * -1 * 0.5f;
+            goalPos.x += Mathf.Sign(player.moveDir.x) * -1 * 0.5f;
 
             characterShadow.SetActive(true);
             Vector3 shadowSca = characterShadow.transform.localScale;
-            shadowSca.x = Mathf.Abs(shadowSca.x) * Mathf.Sign(character.transform.localScale.x);
+            shadowSca.x = Mathf.Abs(shadowSca.x) * Mathf.Sign(player.transform.localScale.x);
             characterShadow.transform.position = goalPos;
 
             //入力受け取り処理
@@ -84,16 +84,16 @@ public partial class Character : Singleton<Character>
             if (nowTime > endTime)
             {
                 Debug.Log("I" + inputDir.x);
-                Debug.Log("M" + character.moveDir.x);
-                if (inputDir.magnitude > 0.1f && Mathf.Sign(inputDir.x) != Mathf.Sign(character.moveDir.x))
+                Debug.Log("M" + player.moveDir.x);
+                if (inputDir.magnitude > 0.1f && Mathf.Sign(inputDir.x) != Mathf.Sign(player.moveDir.x))
                 {
-                    character.ChangeState(character.move);
+                    player.ChangeState(player.move);
                 }
                 else
                 {
-                    character.moveDir = Vector3.zero;
+                    player.moveDir = Vector3.zero;
                     inputDir = Vector3.zero;
-                    character.ChangeState(character.fall);
+                    player.ChangeState(player.fall);
                 }
             }
 
@@ -103,7 +103,7 @@ public partial class Character : Singleton<Character>
             rotRait = (rotRait < 0) ? 0 : rotRait;
             Vector3 sca = startSca;
             sca.x = startSca.x - (rotRait * startSca.x * 2);
-            character.transform.localScale = sca;
+            player.transform.localScale = sca;
 
             //入力受け取り処理
             if (Input.GetMouseButtonDown(0))
@@ -128,21 +128,21 @@ public partial class Character : Singleton<Character>
 
         public override void OnFixedUpdate()
         {
-            Vector3 moveDir = character.moveDir;
+            Vector3 moveDir = player.moveDir;
             moveDir.x *= moveSpeed_X;
             moveDir.y *= moveSpeed_Y;
             moveDir *= Time.fixedDeltaTime * slowRate * antiSlowRate;
             //移動処理
-            character.transform.position += moveDir;
-            character.moveDir.y -= downforce * Time.fixedDeltaTime * slowRate * antiSlowRate;
+            player.transform.position += moveDir;
+            player.moveDir.y -= downforce * Time.fixedDeltaTime * slowRate * antiSlowRate;
         }
 
         public override void OnExit()
         {
-            goalPos.x += Mathf.Sign(character.moveDir.x) * -1 * 0.03f;
+            goalPos.x += Mathf.Sign(player.moveDir.x) * -1 * 0.03f;
 
-            character.moveDir = inputDir;
-            character.transform.position = goalPos;
+            player.moveDir = inputDir;
+            player.transform.position = goalPos;
 
             _arrowShadow.SetActive(false);
 
@@ -255,8 +255,8 @@ public partial class Character : Singleton<Character>
         private void CharacterVisualControl(Vector3 dir)
         {
             //アニメーターに値を送信
-            character._animator.SetFloat("holizontal", Mathf.Abs(dir.x));
-            character._animator.SetFloat("vertical", dir.y);
+            player._animator.SetFloat("holizontal", Mathf.Abs(dir.x));
+            player._animator.SetFloat("vertical", dir.y);
         }
 
         /// <summary>

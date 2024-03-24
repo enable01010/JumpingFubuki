@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
-public partial class Character : Singleton<Character>
+public partial class Player : Singleton<Player>
 {
     Animator _animator;
 
@@ -12,8 +12,8 @@ public partial class Character : Singleton<Character>
     public A_PlayerState state { private set; get; }
     [SerializeField] IdleState idle;// 変更
     [SerializeField] MoveState move;
-    [SerializeField] Fall fall;
-    [SerializeField] WallLandingMotion wallLanding;
+    [SerializeField] FallState fall;
+    [SerializeField] WallLandingState wallLanding;
 
     //ステート間で保持したいデータ
     [SerializeField] float downforce = 2.0f;
@@ -93,10 +93,10 @@ public partial class Character : Singleton<Character>
     [System.Serializable]
     public class A_PlayerState : I_State
     {
-        protected Character character;
-        public void OnInit(Character character)
+        protected Player player;
+        public void OnInit(Player player)
         {
-            this.character = character;
+            this.player = player;
         }
 
         public virtual void OnEnter() { }

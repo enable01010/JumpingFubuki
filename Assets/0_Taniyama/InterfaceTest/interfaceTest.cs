@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface move1
 {
-    Character character { get;}
+    Player character { get;}
 
     public virtual void move()
     {
@@ -14,7 +14,7 @@ public interface move1
 
 public interface move2
 {
-    public Character character { get; }
+    public Player character { get; }
 
     public virtual void move()
     {
@@ -22,8 +22,8 @@ public interface move2
     }
 }
 
-public class move : Character, move1, move2
+public class move : Player, move1, move2
 {
-    Character move1.character { get => this; }
-    Character move2.character { get => this; }
+    Player move1.character { get => this; }
+    Player move2.character { get => this; }
 }

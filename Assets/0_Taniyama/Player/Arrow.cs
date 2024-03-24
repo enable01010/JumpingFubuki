@@ -8,12 +8,12 @@ public class Arrow : MonoBehaviour
 
     void Start()
     {
-        distance = Character.instance.transform.position - transform.position;
+        distance = Player.instance.transform.position - transform.position;
     }
 
     void Update()
     {
-        transform.position = Character.instance.transform.position - distance;
+        transform.position = Player.instance.transform.position - distance;
     }
 
 }

@@ -33,7 +33,7 @@ public class M_Clear : MonoBehaviour
     {
         if (isOneTime == false)
         {
-            if (Vector2.Distance(Character.instance.transform.position, this.transform.position) < distance)
+            if (Vector2.Distance(Player.instance.transform.position, this.transform.position) < distance)
             {
                 //Debug.Log("クリアだよ！！");
 
