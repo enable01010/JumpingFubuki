@@ -1705,9 +1705,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     isAnimation: 1
-    setaRate: 5
-    yPosRate: 0.5
-    yScaRate: 0.01
+    setaRate: 3
+    yPosRate: 1
+    yScaRate: 1
     stopTime: 0.1
     _hoppng: {fileID: 255912797}
     minHopping: 0.5
@@ -1719,8 +1719,16 @@ MonoBehaviour:
     headWidth: 0.5
     headHeight: 2.5
     wallCheckFrame: 5
+    fxSizeMaxRate: 2
+    fxSizeMinRate: 0.5
+    fxSizeMaxSpeed: 3
+    fxSizeMinSpeed: 0
   fall:
     slow: 0.5
+    fxSizeMaxRate: 2
+    fxSizeMinRate: 0.5
+    fxSizeMaxSpeed: 3
+    fxSizeMinSpeed: 0
   wallLanding:
     endTime: 1
     reveseStartTime: 0.7
@@ -1740,8 +1748,8 @@ MonoBehaviour:
     characterShadow: {fileID: 1821880894}
     characterShadowRenderer: {fileID: 906433288}
   downforce: 2
-  moveSpeed_Y: 40
-  moveSpeed_X: 30
+  moveSpeed_Y: 20
+  moveSpeed_X: 16
   _hoppingFrontPos: {fileID: 1394476553}
   moveDir: {x: 0, y: 0, z: 0}
   _arrow: {fileID: 1352640311}
@@ -1765,7 +1773,7 @@ MonoBehaviour:
   landingFx: {fileID: 251138880631250661, guid: 50ca5a7d60300214d9be2d1961f69480, type: 3}
   headingFx: {fileID: 251138880631250661, guid: 151dbebb734c2c8429e9bb3aab9a8211, type: 3}
   freePartRait: 0.5
-  freePartRaitMoveSpeed: 0.1
+  freePartRaitMoveSpeed: 0.01
 --- !u!1 &506981761
 GameObject:
   m_ObjectHideFlags: 0

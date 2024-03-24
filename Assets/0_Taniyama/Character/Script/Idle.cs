@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class Character : Singleton<Character>
 {
@@ -13,22 +14,34 @@ public partial class Character : Singleton<Character>
 
         //矢印に関する変数
         [SerializeField] bool isVisualizeArrow = true;
-        [SerializeField] float arrowsFirstLot = -38;
+        [SerializeField] float arrowsFirstLot = -47;
         [SerializeField] float arrowSizeMin_X = 0.05f;
-        [SerializeField] float arrowSizeMax_X = 0.4f;
+        [SerializeField] float arrowSizeMax_X = 0.2f;
         [SerializeField] float arrowSizeMin_Y = 0.05f;
         [SerializeField] float arrowSizeMax_Y = 0.15f;
 
         //予測線に関する変数
         [SerializeField] bool isVisualizeVision = true;
-        [SerializeField, Range(0, 15)] int outputCount = 10;
-        [SerializeField] int outputPitch = 10;
+        [SerializeField, Range(0, 15)] int outputCount = 7;
+        [SerializeField] int outputPitch = 3;
         GameObject _arrow;
         SpriteRenderer[] _visions;
         float downforce;
         float moveSpeed_Y;
         float moveSpeed_X;
         Transform _hoppingFrontPos;
+
+        //Sliderに関する変数
+        [SerializeField] bool isVisualizeSlider = true;
+        [SerializeField] bool isSliderSpeedFixedTime = true;
+        [SerializeField] bool isNormalized = false;
+        [SerializeField, Range(0.5f, 2.0f)] float isNormalizedRate = 1.0f;
+        Slider _slider;
+        [SerializeField] float sliderMaxTime = 0.8f;
+        [SerializeField] float sliderMaxWaitTime = 0.4f;
+        float countTime = 0.0f;
+        float sliderValue = 0.0f;
+        [SerializeField] AnimationCurve sliderCurveRate;
 
         //アニメーション対応用の変数
         [SerializeField] bool isAnimation = true;
@@ -43,10 +56,16 @@ public partial class Character : Singleton<Character>
         Vector3 startPos;
         Vector3 startSca;
 
+        //トレイルの処理
+        float trailStartTime;
+        [SerializeField, Range(0, 1)] float trailLessPitch = 0.9f;
+        [SerializeField] TrailRenderer _treail;
+
         public override void OnEnter()
         {
             this._arrow = character._arrow;
             this._visions = character._visions;
+            this._slider = character._slider;
             this.downforce = character.downforce;
             this.moveSpeed_Y = character.moveSpeed_Y;
             this.moveSpeed_X = character.moveSpeed_X;
@@ -57,14 +76,22 @@ public partial class Character : Singleton<Character>
             startPos = character.transform.position;
             startSca = character.transform.localScale;
 
+            SetDefaultSlider();
+
             if (Input.GetMouseButton(0))
             {
                 TouchStart();
             }
+
+            //トレイル関係の処理
+            trailStartTime = _treail.time;
+            Debug.Log(trailStartTime);
         }
 
         public override void OnUpdate()
         {
+            SetTrailParameter();
+
             if (Input.GetMouseButtonDown(0))
             {
                 TouchStart();
@@ -81,6 +108,7 @@ public partial class Character : Singleton<Character>
             {
                 AnimControl();
             }
+
         }
 
         public override void OnExit()
@@ -91,6 +119,12 @@ public partial class Character : Singleton<Character>
             {
                 _visions[i].gameObject.SetActive(false);
             }
+
+            _slider.gameObject.SetActive(false);
+            SetDefaultSlider();
+
+            //トレイル関係の処理
+            _treail.time = trailStartTime;
         }
 
         /// <summary>
@@ -104,6 +138,8 @@ public partial class Character : Singleton<Character>
 
             SetActiveVision();
 
+            SetActiveSlider();
+
             SetDefaultAnim();
         }
 
@@ -113,6 +149,10 @@ public partial class Character : Singleton<Character>
         private void Touch()
         {
             Vector3 inputDir = CalculatInputDir();
+
+            SliderControl();
+
+            inputDir = SliderDir(inputDir);
 
             CharacterVisualControl(inputDir);
 
@@ -127,8 +167,14 @@ public partial class Character : Singleton<Character>
         private void TouchOut()
         {
             Vector3 dir = CalculatInputDir();
+
+            SliderControl();
+            dir = SliderDir(dir);
+
             character.moveDir = dir;
             character.ChangeState(character.move);
+
+            SetDefaultSlider();
         }
 
         /// <summary>
@@ -160,6 +206,16 @@ public partial class Character : Singleton<Character>
                 col.a = rait;
                 _visions[i].color = col;
             }
+        }
+
+        /// <summary>
+        /// Sliderを表示する処理
+        /// </summary>
+        private void SetActiveSlider()
+        {
+            if (isVisualizeSlider == false) return;
+
+            _slider.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -261,6 +317,60 @@ public partial class Character : Singleton<Character>
         }
 
         /// <summary>
+        /// Sliderを調整する処理
+        /// </summary>
+        private void SliderControl()
+        {
+            if (isVisualizeSlider == false) return;
+
+            countTime += Time.deltaTime;
+
+            if (countTime > sliderMaxTime + sliderMaxWaitTime) countTime -= sliderMaxTime + sliderMaxWaitTime;
+
+            sliderValue = countTime / sliderMaxTime;
+
+            //if (sliderValue > 1.0f) sliderValue = 1.0f;
+            sliderValue = (sliderValue > 1.0f) ? 1.0f : sliderValue;
+
+            _slider.value = sliderValue;
+
+            SliderSpeedControl();
+        }
+
+
+        /// <summary>
+        /// Sliderのspeedを調整する処理
+        /// </summary>
+        private void SliderSpeedControl()
+        {
+            if (isSliderSpeedFixedTime == false) return;
+
+            float numerator = sliderCurveRate.Evaluate(sliderValue) - sliderCurveRate.Evaluate(0.0f);
+            float denominator = sliderCurveRate.Evaluate(1.0f) - sliderCurveRate.Evaluate(0.0f);
+
+            _slider.value = numerator / denominator;
+        }
+
+
+        /// <summary>
+        /// Vector3にSliderを反映する処理
+        /// </summary>
+        /// <returns></returns>
+        private Vector3 SliderDir(Vector3 dir)
+        {
+            if (isVisualizeSlider == false) return dir;
+
+            if (isNormalized == true)
+            {
+                dir = dir.normalized * isNormalizedRate;
+            }
+
+            dir *= sliderCurveRate.Evaluate(sliderValue);
+
+            return dir;
+        }
+
+        /// <summary>
         /// キャラクターの向きを調整する処理
         /// </summary>
         /// <param name="direction"></param>
@@ -274,6 +384,16 @@ public partial class Character : Singleton<Character>
         }
 
         /// <summary>
+        /// Sliderを初期数値に戻す処理
+        /// </summary>
+        private void SetDefaultSlider()
+        {
+            countTime = 0.0f;
+            sliderValue = 0.0f;
+        }
+
+
+        /// <summary>
         /// アニメーションを初期位置に戻す処理
         /// </summary>
         private void SetDefaultAnim()
@@ -283,6 +403,8 @@ public partial class Character : Singleton<Character>
             sita = Mathf.PI;
             character.transform.position = startPos;
             character.transform.localScale = startSca;
+            Vector3 sca = new Vector3(1, 1, 1);
+            _hoppng.localScale = Vector3.one;
         }
 
         /// <summary>
@@ -337,6 +459,16 @@ public partial class Character : Singleton<Character>
                     character.transform.position = pos;
                 }
             }
+        }
+
+        /// <summary>
+        /// トレイルの表示を調整する処理
+        /// </summary>
+        private void SetTrailParameter()
+        {
+            if (_treail.time < 0.001f) return;
+
+            _treail.time *= trailLessPitch;
         }
 
     }

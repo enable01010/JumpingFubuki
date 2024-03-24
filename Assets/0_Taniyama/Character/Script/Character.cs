@@ -10,7 +10,7 @@ public partial class Character : Singleton<Character>
 
     //ステートに関係する処理
     public A_PlayerState state { private set; get; }
-    [SerializeField] IdleSliderState idle;// 変更
+    [SerializeField] IdleState idle;// 変更
     [SerializeField] MoveState move;
     [SerializeField] Fall fall;
     [SerializeField] WallLandingMotion wallLanding;
